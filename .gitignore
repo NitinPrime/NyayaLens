@@ -48,5 +48,9 @@ logs/
 uploads/
 data/uploads/
 
+# Local SQLite (do not deploy this file)
+data/*.db
+*.db
+
 # Docker volumes
 postgres_data/
