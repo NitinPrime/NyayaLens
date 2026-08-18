@@ -1,13 +1,16 @@
 """Database session management."""
 
-import os
+import logging
 from collections.abc import AsyncGenerator
+from urllib.parse import urlsplit
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
 from app.config import get_settings
+from app.db.url import postgres_connect_args
 
+logger = logging.getLogger(__name__)
 settings = get_settings()
 
 engine_kwargs: dict = {"echo": False}
@@ -17,8 +20,11 @@ if settings.is_sqlite:
     engine_kwargs["poolclass"] = StaticPool
 else:
     engine_kwargs["pool_pre_ping"] = True
-    if os.getenv("RAILWAY_ENVIRONMENT") or "railway" in settings.database_url.lower():
-        engine_kwargs["connect_args"] = {"ssl": True}
+    connect_args = postgres_connect_args(settings.database_url)
+    if connect_args:
+        engine_kwargs["connect_args"] = connect_args
+    host = urlsplit(settings.database_url.replace("postgresql+asyncpg://", "https://")).hostname
+    logger.info("Using Postgres host %s", host)
 
 engine = create_async_engine(settings.database_url, **engine_kwargs)
 

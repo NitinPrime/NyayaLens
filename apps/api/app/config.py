@@ -2,32 +2,16 @@
 
 from functools import lru_cache
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# Local: apps/api/app/config.py → repo root. Docker: /src/apps/api/app/config.py → /src
+from app.db.url import normalize_database_url, normalize_sync_database_url
+
 _HERE = Path(__file__).resolve()
 REPO_ROOT = _HERE.parents[3] if (_HERE.parents[3] / "data" / "legal_sources").exists() else _HERE.parents[1]
 DATA_DIR = REPO_ROOT / "data"
 DEFAULT_SQLITE_PATH = DATA_DIR / "nyayalens.db"
-
-
-def normalize_database_url(url: str) -> str:
-    """Railway provides postgresql://; SQLAlchemy async needs postgresql+asyncpg://."""
-    if url.startswith("postgres://"):
-        url = "postgresql://" + url[len("postgres://") :]
-    if url.startswith("postgresql://") and "+asyncpg" not in url:
-        url = "postgresql+asyncpg://" + url[len("postgresql://") :]
-    return url
-
-
-def normalize_sync_database_url(url: str) -> str:
-    if url.startswith("postgres://"):
-        return "postgresql://" + url[len("postgres://") :]
-    if "+asyncpg://" in url:
-        return url.replace("postgresql+asyncpg://", "postgresql://", 1)
-    return url
 
 
 class Settings(BaseSettings):
@@ -37,36 +21,29 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # Database — SQLite default for local dev without Docker
     database_url: str = f"sqlite+aiosqlite:///{DEFAULT_SQLITE_PATH.as_posix()}"
     database_url_sync: str = f"sqlite:///{DEFAULT_SQLITE_PATH.as_posix()}"
 
-    # API
     api_host: str = "0.0.0.0"
     api_port: int = 8000
     api_secret_key: str = "change-me-in-production"
-    cors_origins: str = "http://localhost:3000"
+    cors_origins: str = "*"
 
-    # LLM
     llm_provider: str = "mock"
     openai_api_key: str = ""
     anthropic_api_key: str = ""
     llm_model: str = "gpt-4o-mini"
 
-    # Embeddings
     embedding_provider: str = "mock"
     embedding_model: str = "text-embedding-3-small"
     embedding_dimension: int = 1536
 
-    # Auth
     jwt_secret_key: str = "change-me-jwt-secret"
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 1440
 
-    # Logging
     log_level: str = "INFO"
 
-    # Uploads
     max_upload_size_mb: int = 25
     upload_dir: str = str(REPO_ROOT / "uploads")
 
@@ -83,15 +60,12 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     settings = Settings()
-    settings.database_url = normalize_database_url(settings.database_url)
-    settings.database_url_sync = normalize_sync_database_url(
-        settings.database_url_sync or settings.database_url
-    )
-    if settings.is_sqlite and ":///" in settings.database_url and settings.database_url.startswith(
-        "sqlite+aiosqlite:///./"
-    ):
-        db_path = REPO_ROOT / settings.database_url.replace("sqlite+aiosqlite:///./", "")
-        db_path.parent.mkdir(parents=True, exist_ok=True)
-        settings.database_url = f"sqlite+aiosqlite:///{db_path.as_posix()}"
-        settings.database_url_sync = f"sqlite:///{db_path.as_posix()}"
+    raw = (settings.database_url or "").strip()
+    if not raw:
+        raw = f"sqlite+aiosqlite:///{DEFAULT_SQLITE_PATH.as_posix()}"
+    settings.database_url = normalize_database_url(raw)
+    settings.database_url_sync = normalize_sync_database_url(settings.database_url_sync or settings.database_url)
+    if settings.is_sqlite:
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        Path(settings.upload_dir).mkdir(parents=True, exist_ok=True)
     return settings
