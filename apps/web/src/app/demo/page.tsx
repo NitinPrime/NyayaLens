@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/lib/api";
 
-export const DEMO_CASES = [
+const DEMO_CASES = [
   {
     id: "deposit",
     title: "Security deposit dispute",
