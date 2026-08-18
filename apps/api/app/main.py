@@ -30,13 +30,13 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    origins = settings.cors_origins_list
-    allow_all = "*" in origins
+    # Browsers reject allow_origins=["*"] together with allow_credentials=True.
+    # Vercel preview URLs change every deploy, so allow any vercel.app origin.
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"] if allow_all else origins,
-        allow_origin_regex=r"https://.*\.vercel\.app" if not allow_all else None,
-        allow_credentials=not allow_all,
+        allow_origins=["*"],
+        allow_origin_regex=r"https://.*\.vercel\.app",
+        allow_credentials=False,
         allow_methods=["*"],
         allow_headers=["*"],
     )
