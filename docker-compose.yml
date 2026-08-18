@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: nyayalens-db
+    environment:
+      POSTGRES_USER: nyayalens
+      POSTGRES_PASSWORD: nyayalens
+      POSTGRES_DB: nyayalens
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nyayalens"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: nyayalens-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://nyayalens:nyayalens@postgres:5432/nyayalens
+      DATABASE_URL_SYNC: postgresql://nyayalens:nyayalens@postgres:5432/nyayalens
+      LLM_PROVIDER: mock
+      CORS_ORIGINS: http://localhost:3000
+      LOG_LEVEL: INFO
+    volumes:
+      - ./apps/api:/app
+      - ./packages/schemas:/packages/schemas
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: nyayalens-web
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+  uploads_data:

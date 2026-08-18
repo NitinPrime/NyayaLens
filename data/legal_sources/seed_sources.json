@@ -1,0 +1,142 @@
+[
+  {
+    "title": "Indian Contract Act, 1872",
+    "source_type": "act",
+    "section": "Section 10",
+    "text": "All agreements are contracts if they are made by the free consent of parties competent to contract, for a lawful consideration and with a lawful object, and are not hereby expressly declared to be void.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["contract", "loan", "agreement", "money", "breach", "consideration", "deposit"],
+    "effective_date": "1872-09-01",
+    "domain": "contract_law"
+  },
+  {
+    "title": "Indian Contract Act, 1872",
+    "source_type": "act",
+    "section": "Section 73",
+    "text": "When a contract has been broken, the party who suffers by such breach is entitled to receive, from the party who has broken the contract, compensation for any loss or damage caused to him thereby, which naturally arose in the usual course of things from such breach, or which the parties knew, when they made the contract, to be likely to result from the breach of it. Such compensation is not to be given for any remote and indirect loss or damage sustained by reason of the breach.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["contract", "breach", "damages", "loan", "recovery", "compensation", "deposit"],
+    "effective_date": "1872-09-01",
+    "domain": "contract_law"
+  },
+  {
+    "title": "Limitation Act, 1963",
+    "source_type": "act",
+    "section": "Article 19",
+    "text": "For money payable for money lent, the period of limitation is three years from the date when the loan is made. Delay in instituting a claim may affect whether the claim remains actionable.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["limitation", "loan", "money", "recovery", "time-barred", "deadline"],
+    "effective_date": "1963-10-05",
+    "domain": "civil_procedure"
+  },
+  {
+    "title": "Consumer Protection Act, 2019",
+    "source_type": "act",
+    "section": "Section 2(7)",
+    "text": "Consumer means any person who buys any goods or avails any service for a consideration which has been paid or promised or partly paid and partly promised, or under any system of deferred payment, and includes any user of such goods other than the person who buys such goods for consideration paid or promised when such use is made with the approval of such person.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["consumer", "defective", "goods", "service", "purchase", "refund", "landlord", "deposit"],
+    "effective_date": "2019-07-20",
+    "domain": "consumer_law"
+  },
+  {
+    "title": "Consumer Protection Act, 2019",
+    "source_type": "act",
+    "section": "Section 2(11)",
+    "text": "Deficiency means any fault, imperfection, shortcoming or inadequacy in the quality, nature and manner of performance which is required to be maintained by or under any law for the time being in force or has been undertaken to be performed by a person in pursuance of a contract or otherwise in relation to any service.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["consumer", "deficiency", "service", "refund", "landlord", "deposit", "warranty"],
+    "effective_date": "2019-07-20",
+    "domain": "consumer_law"
+  },
+  {
+    "title": "Consumer Protection Act, 2019",
+    "source_type": "act",
+    "section": "Section 38",
+    "text": "The District Commission, if satisfied that any of the allegations contained in the complaint about the goods or services are proved, may direct the opposite party to remove the defect, replace the goods, return to the complainant the price paid, or pay such amount as may be awarded as compensation to the consumer for any loss or injury suffered.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["consumer", "defective", "refund", "replacement", "compensation", "warranty", "forum"],
+    "effective_date": "2019-07-20",
+    "domain": "consumer_law"
+  },
+  {
+    "title": "Payment of Wages Act, 1936",
+    "source_type": "act",
+    "section": "Section 5",
+    "text": "The wages of every person employed upon or in any railway, factory or industrial or other establishment upon or in which less than one thousand persons are employed, shall be paid before the expiry of the seventh day after the last day of the wage period. Where employment is terminated, wages shall be paid before the expiry of the second working day from the day on which employment is terminated.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["employment", "salary", "wages", "termination", "settlement", "unpaid"],
+    "effective_date": "1936-04-23",
+    "domain": "employment_law"
+  },
+  {
+    "title": "Industrial Disputes Act, 1947",
+    "source_type": "act",
+    "section": "Section 2A",
+    "text": "Where any employer discharges, dismisses, retrenches or otherwise terminates the services of an individual workman, any dispute or difference between that workman and his employer connected with, or arising out of, such discharge, dismissal, retrenchment or termination shall be deemed to be an industrial dispute notwithstanding that no other workman nor any union of workmen is a party to the dispute.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["employment", "workman", "termination", "industrial", "job", "employee", "dismissal"],
+    "effective_date": "1965-12-01",
+    "domain": "employment_law"
+  },
+  {
+    "title": "Information Technology Act, 2000",
+    "source_type": "act",
+    "section": "Section 66C",
+    "text": "Whoever, fraudulently or dishonestly makes use of the electronic signature, password or any other unique identification feature of any other person, shall be punished with imprisonment of either description for a term which may extend to three years and shall also be liable to fine which may extend to one lakh rupees.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["cyber", "identity", "password", "fraud", "upi", "otp", "harassment"],
+    "effective_date": "2009-10-27",
+    "domain": "cyber_law"
+  },
+  {
+    "title": "Information Technology Act, 2000",
+    "source_type": "act",
+    "section": "Section 66D",
+    "text": "Whoever, by means of any communication device or computer resource cheats by personation, shall be punished with imprisonment of either description for a term which may extend to three years and shall also be liable to fine which may extend to one lakh rupees.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["cyber", "fraud", "cheating", "personation", "upi", "otp", "online", "payment"],
+    "effective_date": "2009-10-27",
+    "domain": "cyber_law"
+  },
+  {
+    "title": "Information Technology Act, 2000",
+    "source_type": "act",
+    "section": "Section 67",
+    "text": "Whoever publishes or transmits or causes to be published or transmitted in the electronic form, any material which is lascivious or appeals to the prurient interest, or if its effect is such as to tend to deprave and corrupt persons who are likely to read, see or hear the matter contained or embodied in it, shall be punished on first conviction with imprisonment of either description for a term which may extend to three years and with fine which may extend to five lakh rupees.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["cyber", "harassment", "obscene", "electronic", "messages", "images"],
+    "effective_date": "2000-10-17",
+    "domain": "cyber_law"
+  },
+  {
+    "title": "Transfer of Property Act, 1882",
+    "source_type": "act",
+    "section": "Section 108",
+    "text": "In the absence of a contract or local usage to the contrary, the lessor and lessee of immovable property have reciprocal rights and liabilities, including that the lessor is bound on the lessee's request to put the lessee in possession of the property, and the lessee is bound to restore the property in as good condition as it was at the time he was put in possession, subject to reasonable wear and tear.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["property", "tenancy", "lease", "landlord", "deposit", "rent", "possession"],
+    "effective_date": "1882-07-01",
+    "domain": "property_law"
+  },
+  {
+    "title": "Model Tenancy Act, 2021",
+    "source_type": "act",
+    "section": "Section 11",
+    "text": "The security deposit to be paid by the tenant in advance shall not exceed two months' rent in case of residential premises and six months' rent in case of non-residential premises. The security deposit shall be refunded to the tenant at the time of taking over vacant possession of the premises, after making due deduction of any liability of the tenant.",
+    "source_url": "https://mohua.gov.in/",
+    "topics": ["tenancy", "landlord", "deposit", "security", "rent", "refund", "property"],
+    "effective_date": "2021-06-02",
+    "domain": "tenancy_law"
+  },
+  {
+    "title": "Indian Evidence Act, 1872",
+    "source_type": "act",
+    "section": "Section 65B",
+    "text": "Any information contained in an electronic record which is printed on paper, stored, recorded or copied in optical or magnetic media produced by a computer shall be deemed to be a document, if the conditions mentioned in this section are satisfied, and shall be admissible in any proceedings without further proof or production of the original.",
+    "source_url": "https://www.indiacode.nic.in/",
+    "topics": ["evidence", "electronic", "whatsapp", "upi", "messages", "digital", "computer"],
+    "effective_date": "2000-10-17",
+    "domain": "civil_procedure"
+  }
+]

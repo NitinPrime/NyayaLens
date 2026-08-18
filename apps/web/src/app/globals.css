@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 20% 98%;
+    --foreground: 220 25% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 12%;
+    --primary: 220 45% 22%;
+    --primary-foreground: 40 20% 98%;
+    --secondary: 40 15% 94%;
+    --secondary-foreground: 220 25% 20%;
+    --muted: 40 10% 92%;
+    --muted-foreground: 220 10% 45%;
+    --accent: 35 60% 50%;
+    --accent-foreground: 40 20% 98%;
+    --border: 220 15% 88%;
+    --ring: 220 45% 22%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-serif;
+  }
+}

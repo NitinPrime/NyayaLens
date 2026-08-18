@@ -1,0 +1,31 @@
+{
+  "id": "demo-loan-dispute",
+  "title": "Financial / Loan Dispute",
+  "is_synthetic": true,
+  "description": "I lent my friend ₹80,000. He promised to return it within three months. I transferred the money through UPI and we have WhatsApp messages discussing the repayment. Six months have passed and he refuses to return it.",
+  "expected": {
+    "case_type": "Potential money / contractual dispute",
+    "parties": ["Person A (claimant/lender)", "Person B (respondent/borrower)"],
+    "facts": [
+      "₹80,000 transferred",
+      "UPI transaction exists",
+      "repayment allegedly promised",
+      "WhatsApp communication exists",
+      "repayment deadline allegedly expired",
+      "repayment allegedly refused"
+    ],
+    "missing_facts": [
+      "Exact wording of repayment agreement",
+      "Date of transfer",
+      "Exact repayment deadline",
+      "Whether interest was agreed",
+      "Whether communication establishes loan vs gift"
+    ],
+    "legal_issues": [
+      "Whether a legally enforceable obligation existed",
+      "What evidence supports that obligation",
+      "Potential remedies",
+      "Limitation/procedural issues"
+    ]
+  }
+}
