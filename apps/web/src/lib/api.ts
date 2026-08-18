@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+export const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/$/, "");
 
 export interface CaseCreatePayload {
   description: string;
@@ -160,13 +160,21 @@ export interface ChatResponse {
 }
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+  const url = `${API_URL}${path}`;
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+      },
+    });
+  } catch {
+    throw new Error(
+      `Could not reach the API at ${API_URL}. On Vercel, set NEXT_PUBLIC_API_URL to https://nyayalens-production.up.railway.app and redeploy. On Railway, set CORS_ORIGINS to your Vercel URL (or *) and use public port 8080.`
+    );
+  }
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({ detail: res.statusText }));
