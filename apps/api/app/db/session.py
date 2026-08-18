@@ -1,5 +1,6 @@
 """Database session management."""
 
+import os
 from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -14,6 +15,10 @@ engine_kwargs: dict = {"echo": False}
 if settings.is_sqlite:
     engine_kwargs["connect_args"] = {"check_same_thread": False}
     engine_kwargs["poolclass"] = StaticPool
+else:
+    engine_kwargs["pool_pre_ping"] = True
+    if os.getenv("RAILWAY_ENVIRONMENT") or "railway" in settings.database_url.lower():
+        engine_kwargs["connect_args"] = {"ssl": True}
 
 engine = create_async_engine(settings.database_url, **engine_kwargs)
 

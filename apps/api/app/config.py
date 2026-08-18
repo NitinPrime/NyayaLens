@@ -6,15 +6,33 @@ from typing import List
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# Repo root: apps/api/app/config.py -> ../../../
-REPO_ROOT = Path(__file__).resolve().parents[3]
+# Local: apps/api/app/config.py → repo root. Docker: /src/apps/api/app/config.py → /src
+_HERE = Path(__file__).resolve()
+REPO_ROOT = _HERE.parents[3] if (_HERE.parents[3] / "data" / "legal_sources").exists() else _HERE.parents[1]
 DATA_DIR = REPO_ROOT / "data"
 DEFAULT_SQLITE_PATH = DATA_DIR / "nyayalens.db"
 
 
+def normalize_database_url(url: str) -> str:
+    """Railway provides postgresql://; SQLAlchemy async needs postgresql+asyncpg://."""
+    if url.startswith("postgres://"):
+        url = "postgresql://" + url[len("postgres://") :]
+    if url.startswith("postgresql://") and "+asyncpg" not in url:
+        url = "postgresql+asyncpg://" + url[len("postgresql://") :]
+    return url
+
+
+def normalize_sync_database_url(url: str) -> str:
+    if url.startswith("postgres://"):
+        return "postgresql://" + url[len("postgres://") :]
+    if "+asyncpg://" in url:
+        return url.replace("postgresql+asyncpg://", "postgresql://", 1)
+    return url
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=str(REPO_ROOT / ".env"),
+        env_file=str(REPO_ROOT / ".env") if (REPO_ROOT / ".env").exists() else None,
         env_file_encoding="utf-8",
         extra="ignore",
     )
@@ -54,7 +72,8 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins_list(self) -> List[str]:
-        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+        origins = [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+        return origins or ["*"]
 
     @property
     def is_sqlite(self) -> bool:
@@ -64,7 +83,13 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     settings = Settings()
-    if settings.is_sqlite and settings.database_url.startswith("sqlite+aiosqlite:///./"):
+    settings.database_url = normalize_database_url(settings.database_url)
+    settings.database_url_sync = normalize_sync_database_url(
+        settings.database_url_sync or settings.database_url
+    )
+    if settings.is_sqlite and ":///" in settings.database_url and settings.database_url.startswith(
+        "sqlite+aiosqlite:///./"
+    ):
         db_path = REPO_ROOT / settings.database_url.replace("sqlite+aiosqlite:///./", "")
         db_path.parent.mkdir(parents=True, exist_ok=True)
         settings.database_url = f"sqlite+aiosqlite:///{db_path.as_posix()}"

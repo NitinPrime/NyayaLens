@@ -18,4 +18,4 @@ RUN pip install --no-cache-dir -e /src/packages/schemas -r requirements.txt
 ENV PYTHONUNBUFFERED=1
 EXPOSE 8000
 
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "echo \"Listening on 0.0.0.0:${PORT:-8000}\" && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
