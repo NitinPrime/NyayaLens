@@ -5,7 +5,7 @@ import { useState } from "react";
 import { AppHeader } from "@/components/layout/app-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { api, API_URL } from "@/lib/api";
+import { api, API_BACKEND_URL } from "@/lib/api";
 
 const DEMO_CASES = [
   {
@@ -76,7 +76,7 @@ export default function DemoPage() {
           </p>
         </div>
         {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
-        <p className="mb-4 text-xs text-muted-foreground">API: {API_URL}</p>
+        <p className="mb-4 text-xs text-muted-foreground">API proxy → {API_BACKEND_URL}</p>
         <div className="space-y-4">
           {DEMO_CASES.map((demo) => (
             <Card key={demo.id}>

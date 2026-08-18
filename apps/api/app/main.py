@@ -3,13 +3,58 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.types import ASGIApp, Receive, Scope, Send
 
 from app.api.routes import auth, cases, health, legal, messages
-from app.config import get_settings
 from app.db.init_db import init_db
 from app.db.session import engine
 from app.logging_config import setup_logging
+
+
+class PermissiveCORSMiddleware:
+    """Always allow browser origins, including changing Vercel preview URLs."""
+
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+
+        headers = {key.decode().lower(): value.decode() for key, value in scope.get("headers", [])}
+        origin = headers.get("origin") or "*"
+        request_headers = headers.get("access-control-request-headers") or "*"
+        cors_headers = [
+            (b"access-control-allow-origin", origin.encode()),
+            (b"access-control-allow-methods", b"GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD"),
+            (b"access-control-allow-headers", request_headers.encode()),
+            (b"access-control-max-age", b"86400"),
+            (b"vary", b"Origin"),
+        ]
+
+        if scope["method"] == "OPTIONS":
+            await send(
+                {
+                    "type": "http.response.start",
+                    "status": 204,
+                    "headers": cors_headers + [(b"content-length", b"0")],
+                }
+            )
+            await send({"type": "http.response.body", "body": b""})
+            return
+
+        async def send_with_cors(message: dict) -> None:
+            if message["type"] == "http.response.start":
+                existing = list(message.get("headers", []))
+                present = {key.lower() for key, _ in existing}
+                for key, value in cors_headers:
+                    if key not in present:
+                        existing.append((key, value))
+                message = {**message, "headers": existing}
+            await send(message)
+
+        await self.app(scope, receive, send_with_cors)
 
 
 @asynccontextmanager
@@ -21,8 +66,6 @@ async def lifespan(app: FastAPI):
 
 
 def create_app() -> FastAPI:
-    settings = get_settings()
-
     app = FastAPI(
         title="NyayaLens API",
         description="Evidence-grounded legal case analysis for Indian law",
@@ -30,16 +73,7 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    # Browsers reject allow_origins=["*"] together with allow_credentials=True.
-    # Vercel preview URLs change every deploy, so allow any vercel.app origin.
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_origin_regex=r"https://.*\.vercel\.app",
-        allow_credentials=False,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+    app.add_middleware(PermissiveCORSMiddleware)
 
     app.include_router(health.router)
     app.include_router(health.router, prefix="/api/v1")

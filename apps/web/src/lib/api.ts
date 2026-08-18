@@ -1,4 +1,10 @@
-export const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/$/, "");
+const DIRECT_API_URL = (
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+).replace(/\/$/, "");
+
+/** Browser uses same-origin `/api` so Vercel can proxy to Railway (no CORS). */
+export const API_URL = typeof window === "undefined" ? DIRECT_API_URL : "";
+export const API_BACKEND_URL = DIRECT_API_URL;
 
 export interface CaseCreatePayload {
   description: string;
@@ -172,7 +178,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     });
   } catch {
     throw new Error(
-      `Could not reach the API at ${API_URL}. On Vercel, set NEXT_PUBLIC_API_URL to https://nyayalens-production.up.railway.app and redeploy. On Railway, set CORS_ORIGINS to your Vercel URL (or *) and use public port 8080.`
+      `Could not reach the API (${API_BACKEND_URL || "same origin"}). Wait for Vercel to finish deploying, then retry. The site should call /api on this domain, which proxies to Railway.`
     );
   }
 
